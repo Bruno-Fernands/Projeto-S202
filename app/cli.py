@@ -1,4 +1,4 @@
-from app.modelsneo4j import BibliNeo4j
+from modelsneo4j import BibliNeo4j
 
 class LibraryCLI:
     def __init__(self, user_model, neo4j_driver):
@@ -29,7 +29,7 @@ class LibraryCLI:
         elif choice == "2":
             self.register()
         elif choice == "3":
-            self.exit_program()  # Aqui!
+            self.exit_program() 
         else:
             print("Opção inválida!")
 
