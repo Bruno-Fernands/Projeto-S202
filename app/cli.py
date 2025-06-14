@@ -1,5 +1,8 @@
+from app.modelsneo4j import BibliNeo4j
+
 class LibraryCLI:
-    def __init__(self, user_model):
+    def __init__(self, user_model, neo4j_driver):
+        self.biblioteca = BibliNeo4j(neo4j_driver)
         self.user_model = user_model
         self.current_user = None
 
@@ -18,17 +21,18 @@ class LibraryCLI:
         print("1. Login")
         print("2. Registrar")
         print("3. Sair")
-        
+    
         choice = input("Escolha: ")
-        
+    
         if choice == "1":
             self.login()
         elif choice == "2":
             self.register()
         elif choice == "3":
-            exit()
+            self.exit_program()  # Aqui!
         else:
             print("Opção inválida!")
+
 
     def show_user_menu(self):
         print(f"\nBem-vindo, {self.current_user['name']}!")
@@ -61,7 +65,7 @@ class LibraryCLI:
         if choice == "1":
             self.manage_users()
         elif choice == "2":
-            print("Integrar com Neo4j aqui")
+            self.manage_books()
         elif choice == "3":
             self.current_user = None
         else:
@@ -155,3 +159,38 @@ class LibraryCLI:
                 break
             else:
                 print("Opção inválida!")
+
+    def manage_books(self):
+        while True:
+            print("\nGerenciar Livros")
+            print("1. Registrar Livro")
+            print("2. Listar Livros")
+            print("3. Buscar por Título")
+            print("4. Voltar")
+
+            choice = input("Escolha: ")
+
+            if choice == "1":
+                titulo = input("Título: ")
+                autor = input("Autor: ")
+                ano = input("Ano de Publicação: ")
+                isbn = input("ISBN: ")
+                categoria = input("Categoria: ")
+                self.biblioteca.registrar_livro(titulo, autor, ano, isbn, categoria)
+                print("Livro registrado e salvo no banco com sucesso.")
+            elif choice == "2":
+                self.biblioteca.listar_livros()
+            elif choice == "3":
+                titulo = input("Título do livro: ")
+                self.biblioteca.buscar_por_titulo(titulo)
+            elif choice == "4":
+                break
+            else:
+                print("Opção inválida!")
+    
+    def exit_program(self):
+        self.biblioteca.close()
+        print("Conexão com a biblioteca encerrada.")
+        exit()
+
+            
